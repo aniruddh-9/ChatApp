@@ -74,20 +74,14 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnCompleteListener(this,new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                       // Log.d("Before Setting"," Before entering IFF  Hiiiiiiiiiiiiiiiiiiii");
                         if(task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
-                            //    assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
-                         //   Log.d("Before Setting"," After getting iD    Hiiiiiiiiiiiiiiiiiiii");
                             reference = FirebaseDatabase.getInstance().getReference("users").child(userid);
-                           // Log.d("Before Setting","Hiiiiiiiiiiiiiiiiiiii");
-                            reference.setValue("Parinitha Krishna");
-                            //Log.d("Before Setting"," After setting Hiiiiiiiiiiiiiiiiiiii");
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userid);
                             hashMap.put("username", username);
-                            hashMap.put("defaultURL", "default");
+                            hashMap.put("imageURL", "default");
 
                             // Writing to the database
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -103,7 +97,6 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                         }
                         else{
-                            //Log.d("Before Setting","In else Hiiiiiiiiiiiiiiiiiiii");
                             Toast.makeText(RegisterActivity.this, "You cannot register with this email id and password",Toast.LENGTH_SHORT).show();
                         }
                     }
