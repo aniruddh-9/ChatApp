@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -67,27 +68,33 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register (final String username, String email, final String password){
+     //   Log.d("Before Setting"," Before creatING USER Hiiiiiiiiiiiiiiiiiiii");
+
         auth.createUserWithEmailAndPassword(email,password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this,new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+                       // Log.d("Before Setting"," Before entering IFF  Hiiiiiiiiiiiiiiiiiiii");
+                        if(task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
-                            assert firebaseUser != null;
+                            //    assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
-
-                            reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
-
+                         //   Log.d("Before Setting"," After getting iD    Hiiiiiiiiiiiiiiiiiiii");
+                            reference = FirebaseDatabase.getInstance().getReference("users").child(userid);
+                           // Log.d("Before Setting","Hiiiiiiiiiiiiiiiiiiii");
+                            reference.setValue("Parinitha Krishna");
+                            //Log.d("Before Setting"," After setting Hiiiiiiiiiiiiiiiiiiii");
                             HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id",userid);
+                            hashMap.put("id", userid);
                             hashMap.put("username", username);
-                            hashMap.put("defaultURL","default");
+                            hashMap.put("defaultURL", "default");
 
+                            // Writing to the database
                             reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+                                    if (task.isSuccessful()) {
+                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                         finish();
@@ -96,6 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                         }
                         else{
+                            //Log.d("Before Setting","In else Hiiiiiiiiiiiiiiiiiiii");
                             Toast.makeText(RegisterActivity.this, "You cannot register with this email id and password",Toast.LENGTH_SHORT).show();
                         }
                     }
